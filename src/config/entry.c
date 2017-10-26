@@ -11,6 +11,7 @@ void config_stream_destroy(stream_t* st) {
         config_stream_destroy(st->next);
     }
 
+    free(st->addr);
     free(st);
 }
 
@@ -29,5 +30,6 @@ void config_entry_destroy(entry_t* en) {
         config_stream_destroy(en->streams);
     }
 
+    free(en->addr);
     free(en);
 }

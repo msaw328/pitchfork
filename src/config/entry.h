@@ -4,28 +4,34 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define ADDRESS_LENGTH_MAX 256
-
 enum addr_type {
-    INV,
+    INV_ADDR_TYPE,
     IP,
     UNIX
 };
 
+enum method {
+    INV_METHOD,
+    RANDOM,
+    ORDER
+};
+
 struct stream {
-    enum addr_type type;
-    char address[ADDRESS_LENGTH_MAX];
+    enum addr_type addr_type;
+    char* addr;
     struct stream* next;
 };
 
 struct entry {
-    enum addr_type type;
-    char address[ADDRESS_LENGTH_MAX];
+    enum addr_type addr_type;
+    enum method method;
+    char* addr;
     struct stream* streams;
     struct entry* next;
 };
 
 typedef enum addr_type addr_type_t;
+typedef enum method method_t;
 typedef struct stream stream_t;
 typedef struct entry entry_t;
 
