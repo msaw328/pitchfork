@@ -5,15 +5,15 @@
 #include <string.h>
 
 enum addr_type {
-    INV_ADDR_TYPE,
-    IP,
-    UNIX
+    ADDR_TYPE_INV,
+    ADDR_TYPE_IP,
+    ADDR_TYPE_UNIX
 };
 
 enum method {
-    INV_METHOD,
-    RANDOM,
-    ORDER
+    MET_INV,
+    MET_RANDOM,
+    MET_ORDER
 };
 
 struct stream {
@@ -39,8 +39,12 @@ stream_t* config_stream_init();
 
 void config_stream_destroy(stream_t*);
 
+void config_stream_append(stream_t**, stream_t*);
+
 entry_t* config_entry_init();
 
 void config_entry_destroy(entry_t*);
+
+void config_entry_append(entry_t**, entry_t*);
 
 #endif

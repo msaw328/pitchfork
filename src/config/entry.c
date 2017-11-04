@@ -15,6 +15,14 @@ void config_stream_destroy(stream_t* st) {
     free(st);
 }
 
+void config_stream_append(stream_t** head, stream_t* obj) {
+    if(*head == NULL) {
+        *head = obj;
+    } else {
+        config_stream_append(&((*head)->next), obj);
+    }
+}
+
 entry_t* config_entry_init() {
     entry_t* ret = malloc(sizeof(entry_t));
     memset(ret, 0, sizeof(entry_t));
@@ -32,4 +40,13 @@ void config_entry_destroy(entry_t* en) {
 
     free(en->addr);
     free(en);
+}
+
+void config_entry_append(entry_t** head, entry_t* obj) {
+    if(*head == NULL) {
+        *head = obj;
+    } else {
+        entry_t* next = (*head)->next;
+        config_entry_append(&next, obj);
+    }
 }
