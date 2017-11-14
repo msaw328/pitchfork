@@ -1,16 +1,15 @@
 #ifndef TOKENIZER_H
 #define TOKENIZER_H
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-char* config_load_content(const char*);
+#include "filestate.h"
 
-char* config_next_token(char**, int*);
+char* config_next_token(filestate_t*);
 
-char* config_read_token(char**);
+char* config_read_token(filestate_t*);
 
-int config_match_token(char**, const char*, int*);
+int config_match_token(filestate_t*, const char*);
 
 #endif

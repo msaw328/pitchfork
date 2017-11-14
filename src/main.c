@@ -4,37 +4,40 @@
 
 #include "config/parser.h"
 #include "config/entry.h"
+#include "config/filestack.h"
+#include "config/filestate.h"
 
 // debug
 void print_entry(entry_t*);
 
 int main(int argc, char** argv) {
-    char* buff = config_load_content("halo.txt");
+    filestack_t* fstack = config_filestack_init();
 
-    char* s = buff;
+    filestate_t* fs = config_load_file("halo.txt");
 
-    int line_count = 1;
+    config_filestack_push(fstack, fs);
 
-    config_next_token(&s, &line_count);
 
-    if(!config_match_token(&s, "entry", &line_count)) {
+    config_next_token(fs);
+
+    if(!config_match_token(fs, "entry")) {
         //return NULL; // err no entry
         printf("return NULL // err no entry\n");
 
-        printf("line: %d\n", line_count);
+        printf("line: %d\n", fs->line_count);
         return 0;
     }
 
-    entry_t* obj = config_parse_entry(&s, &line_count);
+    entry_t* obj = config_parse_entry(fstack);
 
     if(obj != NULL) {
         print_entry(obj);
         config_entry_destroy(obj);
     }
 
-    printf("line: %d\n", line_count);
+    printf("line: %d\n", fs->line_count);
 
-    free(buff);
+    config_filestack_destroy(fstack);
 }
 
 // debug

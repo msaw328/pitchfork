@@ -2,22 +2,11 @@
 
 const char* WHITESPACE = " \n\t";
 
-char* config_load_content(const char* name) {
-    FILE* f = fopen(name, "r");
-    fseek(f, 0, SEEK_END);
-    long size = ftell(f);
+char* config_next_token(filestate_t* fs) {
 
-    rewind(f);
-    
-    char* ret = malloc(size + 1);
-    fread(ret, 1, (size_t) size, f);
+    char** s = &(fs->state);
+    int* line_count = &(fs->line_count);
 
-    fclose(f);
-    ret[size] = '\0';
-    return ret;
-}
-
-char* config_next_token(char** s, int* line_count) {
     while(strchr(WHITESPACE, (*s)[0]) && (*s)[0] != '\0') {
         if((*s)[0] == '\n') {
             (*line_count)++;
@@ -31,7 +20,9 @@ char* config_next_token(char** s, int* line_count) {
     return (*s);
 }
 
-char* config_read_token(char** s) {
+char* config_read_token(filestate_t* fs) {
+    char** s = &(fs->state);
+
     size_t tok_len = 0;
 
     while(!strchr(WHITESPACE, (*s)[tok_len]) && (*s)[tok_len] != '\0') {
@@ -47,7 +38,10 @@ char* config_read_token(char** s) {
     return ret;
 }
 
-int config_match_token(char** s, const char* token, int* line_count) {
+int config_match_token(filestate_t* fs, const char* token) {
+    char** s = &(fs->state);
+    int* line_count = &(fs->line_count);
+
     size_t tok_len = strlen(token);
     if(strncmp(*s, token, tok_len) == 0 && (strchr(WHITESPACE, (*s)[tok_len]) || (*s)[tok_len] == '\0')) {
         *s += tok_len;

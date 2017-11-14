@@ -6,13 +6,14 @@
 
 #include "entry.h"
 #include "tokenizer.h"
+#include "filestack.h"
 
-entry_t* config_parse_entry(char** s, int*);
+entry_t* config_parse_entry(filestack_t*);
 
-stream_t* config_parse_stream(char** s, int*);
+stream_t* config_parse_stream(filestack_t*);
 
-addr_type_t config_parse_addr_type(char** s, int*);
+addr_type_t config_parse_addr_type(filestate_t*);
 
-method_t config_parse_method(char**, int*);
+method_t config_parse_method(filestate_t*);
 
 #endif
