@@ -2,7 +2,7 @@
 
 const char* WHITESPACE = " \n\t";
 
-char* config_next_token(filestate_t* fs) {
+char* config_next_token(filestate_t* fs) { // TODO: please make it look normal
 
     char** s = &(fs->state);
     int* line_count = &(fs->line_count);
@@ -14,8 +14,18 @@ char* config_next_token(filestate_t* fs) {
         (*s)++;
     }
 
-    if((*s)[0] == '\0')
+
+    if((*s)[0] == '#') { // comment
+        while((*s)[0] != '\n' && (*s)[0] != '\0') {
+            (*s)++;
+        }
+    }
+    
+    if((*s)[0] == '\0') { // end of file buffer
         (*s) = NULL;
+    } else if((*s)[0] == '\n') {
+        config_next_token(fs); // jesus christ recursion
+    }
     
     return (*s);
 }

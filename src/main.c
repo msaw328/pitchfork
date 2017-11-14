@@ -13,7 +13,7 @@ void print_entry(entry_t*);
 int main(int argc, char** argv) {
     filestack_t* fstack = config_filestack_init();
 
-    filestate_t* fs = config_load_file("halo.txt");
+    filestate_t* fs = config_load_file("default.conf");
 
     config_filestack_push(fstack, fs);
 
