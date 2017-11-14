@@ -36,9 +36,19 @@ filestate_t* config_filestack_top(filestack_t* st) {
     return st->arr[st->filled - 1];
 }
 
+int config_filestack_contains_name(filestack_t* st, const char* name) {
+    for(int i = 0; i < st->filled; i++)
+        if(strcmp(st->arr[i]->name, name) == 0)
+            return 1;
+        
+
+    return 0;
+}
+
 void config_filestack_destroy(filestack_t* st) {
     for(int i = 0; i < st->filled; i++) {
-        config_filestate_destroy(st->arr[i]);
+        if(st->arr[i])
+            config_filestate_destroy(st->arr[i]);
     }
 
     free(st->arr);

@@ -20,6 +20,7 @@ filestate_t* config_load_file(const char* name) {
 
     int name_len = strlen(name);
     char* name_buff = malloc(name_len + 1);
+    strncpy(name_buff, name, name_len);
     name_buff[name_len] = '\0';
 
     // filestate

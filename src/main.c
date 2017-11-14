@@ -24,7 +24,7 @@ int main(int argc, char** argv) {
         //return NULL; // err no entry
         printf("return NULL // err no entry\n");
 
-        printf("line: %d\n", fs->line_count);
+        printf("error in file %s on line %d\n", fs->name, fs->line_count);
         return 0;
     }
 
@@ -35,7 +35,9 @@ int main(int argc, char** argv) {
         config_entry_destroy(obj);
     }
 
-    printf("line: %d\n", fs->line_count);
+    fs = config_filestack_top(fstack);
+
+    printf("error in file %s on line %d\n", fs->name, fs->line_count);
 
     config_filestack_destroy(fstack);
 }

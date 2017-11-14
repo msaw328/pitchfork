@@ -23,7 +23,15 @@ entry_t* config_parse_entry(filestack_t* fstack) {
 
     int done = 0;
     while(!done) {
-        config_next_token(fs);
+
+        while(!config_next_token(fs)) { // end of current file, pop from stack
+            filestate_t* oldfile = config_filestack_pop(fstack);
+
+            fs = config_filestack_top(fstack);
+
+            config_filestate_destroy(oldfile);
+        }
+
 
         if(config_match_token(fs, "addr")) {
 
@@ -49,11 +57,29 @@ entry_t* config_parse_entry(filestack_t* fstack) {
         } else if(config_match_token(fs, "stream")) {
             stream_t* str = config_parse_stream(fstack);
             if(str == NULL) {
+                config_entry_destroy(ret);
                 return NULL; // error while parsing stream, propagate
             }
-            
+
             config_stream_append(&(ret->streams), str);
 
+        } else if(config_match_token(fs, "include")) {
+            config_next_token(fs);
+            char* filename = config_read_token(fs);
+
+            if(config_filestack_contains_name(fstack, filename)) {
+                config_entry_destroy(ret);
+                free(filename);
+                return NULL; // include loop
+            }
+
+            filestate_t* newfile = config_load_file(filename);
+
+            config_filestack_push(fstack, newfile);
+
+            fs = newfile;
+
+            free(filename);
         } else if(config_match_token(fs, "}")) {
             done = 1;
         } else {
